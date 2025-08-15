@@ -1,4 +1,4 @@
-# Scroll Whell Command (Fabric 1.20.6)
+# Scroll Whell Command (Fabric 1.20.3-1.20.6)
 
 一个仿APEX风格的轮盘快捷命令
 *（温馨提示：本README为AI生成）*
