@@ -4,7 +4,6 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import net.fabricmc.fabric.api.client.rendering.v1.HudRenderCallback;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
-import net.minecraft.client.render.RenderTickCounter;
 import org.lby123165.scroll_whell_command.client.ui.RadialMenuScreen;
 
 public class RadialMenuOverlay implements HudRenderCallback {
@@ -47,7 +46,7 @@ public class RadialMenuOverlay implements HudRenderCallback {
     }
 
     @Override
-    public void onHudRender(DrawContext drawContext, RenderTickCounter tickCounter) {
+    public void onHudRender(DrawContext drawContext, float tickDelta) {
         if (isVisible()) {
             // We need to manage the render state carefully
             RenderSystem.enableBlend();
@@ -57,7 +56,7 @@ public class RadialMenuOverlay implements HudRenderCallback {
             double mouseX = client.mouse.getX() * (double)client.getWindow().getScaledWidth() / (double)client.getWindow().getWidth();
             double mouseY = client.mouse.getY() * (double)client.getWindow().getScaledHeight() / (double)client.getWindow().getHeight();
 
-            activeMenu.render(drawContext, (int)mouseX, (int)mouseY, tickCounter.getTickDelta(true));
+            activeMenu.render(drawContext, (int)mouseX, (int)mouseY, tickDelta);
 
             RenderSystem.disableBlend();
         }

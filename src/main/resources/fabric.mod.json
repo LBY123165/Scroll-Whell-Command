@@ -6,8 +6,8 @@
   "description": "",
   "authors": [],
   "contact": {},
-  "license": "All-Rights-Reserved",
-  "icon": "assets/scroll_whell_command/icon.png",
+  "license": "GPL-3.0-or-later",
+  "icon": "resources/icon.png",
   "environment": "client",
   "entrypoints": {
     "client": [

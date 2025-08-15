@@ -139,7 +139,8 @@ public class RadialMenuSegmentWidget extends ClickableWidget {
         float[] rgba = argbToRgba(color);
 
         Tessellator tess = Tessellator.getInstance();
-        BufferBuilder buf = tess.begin(VertexFormat.DrawMode.TRIANGLES, VertexFormats.POSITION_COLOR);
+        BufferBuilder buf = tess.getBuffer();
+        buf.begin(VertexFormat.DrawMode.TRIANGLES, VertexFormats.POSITION_COLOR);
 
         for (int i = 0; i < steps; i++) {
             float sa = startAngle + i * stepSize;
@@ -150,13 +151,13 @@ public class RadialMenuSegmentWidget extends ClickableWidget {
             Vector2f i1 = polar(centerX, centerY, innerRadius, sa);
             Vector2f i2 = polar(centerX, centerY, innerRadius, ea);
 
-            buf.vertex(matrix, o1.x, o1.y, 0).color(rgba[0], rgba[1], rgba[2], rgba[3]);
-            buf.vertex(matrix, i1.x, i1.y, 0).color(rgba[0], rgba[1], rgba[2], rgba[3]);
-            buf.vertex(matrix, i2.x, i2.y, 0).color(rgba[0], rgba[1], rgba[2], rgba[3]);
+            buf.vertex(matrix, o1.x, o1.y, 0).color(rgba[0], rgba[1], rgba[2], rgba[3]).next();
+            buf.vertex(matrix, i1.x, i1.y, 0).color(rgba[0], rgba[1], rgba[2], rgba[3]).next();
+            buf.vertex(matrix, i2.x, i2.y, 0).color(rgba[0], rgba[1], rgba[2], rgba[3]).next();
 
-            buf.vertex(matrix, o1.x, o1.y, 0).color(rgba[0], rgba[1], rgba[2], rgba[3]);
-            buf.vertex(matrix, i2.x, i2.y, 0).color(rgba[0], rgba[1], rgba[2], rgba[3]);
-            buf.vertex(matrix, o2.x, o2.y, 0).color(rgba[0], rgba[1], rgba[2], rgba[3]);
+            buf.vertex(matrix, o1.x, o1.y, 0).color(rgba[0], rgba[1], rgba[2], rgba[3]).next();
+            buf.vertex(matrix, i2.x, i2.y, 0).color(rgba[0], rgba[1], rgba[2], rgba[3]).next();
+            buf.vertex(matrix, o2.x, o2.y, 0).color(rgba[0], rgba[1], rgba[2], rgba[3]).next();
         }
         BufferRenderer.drawWithGlobalProgram(buf.end());
     }

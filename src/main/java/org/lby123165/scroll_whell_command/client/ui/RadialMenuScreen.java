@@ -349,14 +349,15 @@ public class RadialMenuScreen extends Screen {
         RenderSystem.setShader(GameRenderer::getPositionColorProgram);
 
         Tessellator tess = Tessellator.getInstance();
-        BufferBuilder buf = tess.begin(VertexFormat.DrawMode.TRIANGLE_FAN, VertexFormats.POSITION_COLOR);
+        BufferBuilder buf = tess.getBuffer();
+        buf.begin(VertexFormat.DrawMode.TRIANGLE_FAN, VertexFormats.POSITION_COLOR);
 
-        buf.vertex(matrix, centerX, centerY, 0).color(rgba[0], rgba[1], rgba[2], rgba[3]);
+        buf.vertex(matrix, centerX, centerY, 0).color(rgba[0], rgba[1], rgba[2], rgba[3]).next();
         for (int i = 0; i <= 360; i += 10) { // 10 degrees per step is smooth enough
             double angle = Math.toRadians(i);
             float x = centerX + (float) (radius * Math.cos(angle));
             float y = centerY + (float) (radius * Math.sin(angle));
-            buf.vertex(matrix, x, y, 0).color(rgba[0], rgba[1], rgba[2], rgba[3]);
+            buf.vertex(matrix, x, y, 0).color(rgba[0], rgba[1], rgba[2], rgba[3]).next();
         }
         BufferRenderer.drawWithGlobalProgram(buf.end());
     }
@@ -369,10 +370,11 @@ public class RadialMenuScreen extends Screen {
         RenderSystem.setShader(GameRenderer::getPositionColorProgram);
 
         Tessellator tess = Tessellator.getInstance();
-        BufferBuilder buf = tess.begin(VertexFormat.DrawMode.DEBUG_LINES, VertexFormats.POSITION_COLOR);
+        BufferBuilder buf = tess.getBuffer();
+        buf.begin(VertexFormat.DrawMode.DEBUG_LINES, VertexFormats.POSITION_COLOR);
 
-        buf.vertex(matrix, x1, y1, 0).color(rgba[0], rgba[1], rgba[2], rgba[3]);
-        buf.vertex(matrix, x2, y2, 0).color(rgba[0], rgba[1], rgba[2], rgba[3]);
+        buf.vertex(matrix, x1, y1, 0).color(rgba[0], rgba[1], rgba[2], rgba[3]).next();
+        buf.vertex(matrix, x2, y2, 0).color(rgba[0], rgba[1], rgba[2], rgba[3]).next();
 
         BufferRenderer.drawWithGlobalProgram(buf.end());
     }
