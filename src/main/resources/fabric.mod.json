@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "id": "scroll_whell_command",
+  "version": "${version}",
+  "name": "Scroll Whell Command",
+  "description": "",
+  "authors": [],
+  "contact": {},
+  "license": "All-Rights-Reserved",
+  "icon": "assets/scroll_whell_command/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "org.lby123165.scroll_whell_command.client.Scroll_whell_commandClient"
+    ],
+    "main": [
+      "org.lby123165.scroll_whell_command.Scroll_whell_command"
+    ]
+  },
+  "mixins": [
+    "scroll_whell_command.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
