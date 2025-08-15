@@ -16,15 +16,6 @@
 
 ---
 
-## 🧩 Requirements 运行环境
-
-- Minecraft: 1.21.1 (`gradle.properties:minecraft_version=1.21.1`)
-- Fabric Loader: >= 0.16.10 (`loader_version=0.16.10`)
-- Fabric API: 0.116.5+1.21.1
-- Java: 21
-
----
-
 ## 📦 Installation 安装
 
 1. 安装 Fabric Loader 与 Fabric API（对应 1.21.1）。
@@ -73,10 +64,7 @@
 
 ## 🤝 Contributing 参与贡献
 
-欢迎提交 Issue 与 PR。请在提交前确保：
-- 构建通过（`gradlew build`）。
-- 遵循项目现有的 UI/交互与代码风格（Fabric 1.21 自定义 Screen 最佳实践）。
-
+欢迎提交 Issue 与 PR。
 ---
 
 ## 📜 License 许可
