@@ -69,5 +69,4 @@
 
 ## 📜 License 许可
 
-- License: All-Rights-Reserved（保留所有权利）。
-- 请勿未经授权分发修改版或用于商业用途。
+- License: GPLv3
