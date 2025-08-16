@@ -15,11 +15,17 @@ public class TranslatableTextWidget extends ClickableWidget {
         this.key = message.getString(); // Simplified - just use the string representation
     }
 
+    // In 1.20.2, ClickableWidget uses renderButton. Override it here.
     @Override
-    public void renderWidget(DrawContext context, int mouseX, int mouseY, float delta) {
+    protected void renderButton(DrawContext context, int mouseX, int mouseY, float delta) {
         if (this.visible) {
             context.drawTextWithShadow(this.textRenderer, this.getMessage(), this.getX(), this.getY(), 0xFFFFFFFF);
         }
+    }
+
+    // Forward-compat: expose renderWidget delegating to renderButton without @Override
+    public void renderWidget(DrawContext context, int mouseX, int mouseY, float delta) {
+        this.renderButton(context, mouseX, mouseY, delta);
     }
 
     @Override

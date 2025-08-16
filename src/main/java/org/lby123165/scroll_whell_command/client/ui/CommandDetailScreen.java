@@ -54,6 +54,11 @@ public class CommandDetailScreen extends Screen {
     }
 
     @Override
+    public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
+        // No-op: remove vanilla dirt background
+    }
+
+    @Override
     protected void init() {
         super.init();
 

@@ -66,6 +66,17 @@ public class CommandEditorScreen extends Screen {
     }
 
     @Override
+    public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
+        // No-op to fully remove the vanilla dirt background
+    }
+
+    @Override
+    public boolean shouldPause() {
+        // Keep world rendering; avoids vanilla paused dirt background
+        return false;
+    }
+
+    @Override
     protected void init() {
         super.init();
         this.clearChildren();
@@ -274,8 +285,9 @@ public class CommandEditorScreen extends Screen {
         hintWidget = this.addDrawableChild(multi);
 
         // 子命令列表（可选中以编辑/删除）
-        int subListY = hintY + hintWidget.getHeight() + vGap;
-        int subListHeight = Math.max(40, panelBottom - subListY - (fieldHeight + buttonHeight + vGap * 2));
+        // 在完成底部按钮与子编辑区定位后再创建，以便准确计算高度
+        int subListY = this.singleFieldY; // 锚定到“命令”输入框位置（多命令时替换该区域）
+        int subListHeight = Math.max(40, this.subEditorTop - vGap - subListY);
         this.subCommandListWidget = new SubCommandListWidget(this.client, width, subListHeight, subListY, 20, this::onSubSelected);
         this.subCommandListWidget.setX(x);
         this.addDrawableChild(this.subCommandListWidget);
@@ -329,6 +341,13 @@ public class CommandEditorScreen extends Screen {
             labelField.setText(selectedItem.label != null ? selectedItem.label : "");
             if (!isMulti) {
                 singleCommandField.setText(selectedItem.command != null ? selectedItem.command : "");
+                // Ensure any previous multi-command UI state is cleared to prevent lingering details
+                if (subCommandListWidget != null) {
+                    subCommandListWidget.setEntries(java.util.List.of());
+                    subCommandListWidget.setSelected(null);
+                }
+                // Collapse sub-editor explicitly on single-command items
+                this.showSubEditor = false;
             } else {
                 singleCommandField.setText("");
             }
@@ -339,17 +358,7 @@ public class CommandEditorScreen extends Screen {
                 // 清空编辑框
                 subCommandInput.setText("");
                 delayInput.setText("");
-                // 多命令时，将列表移动到单命令输入框位置，并拉伸高度到子命令编辑区上方，保持 vGap 间距
-                int panelBottom = this.rightPanelY + this.rightPanelH;
-                int listTop = this.singleFieldY;
-                int listBottom = (this.subEditorTop > 0)
-                        ? this.subEditorTop - vGap
-                        : panelBottom - (fieldHeight + buttonHeight + vGap * 2);
-                // 约束范围，避免出现负高度
-                listBottom = Math.max(listBottom, listTop + 40);
-                int newHeight = listBottom - listTop;
-                this.subCommandListWidget.setY(listTop);
-                this.subCommandListWidget.setHeight(newHeight);
+                // 保持 initDetailPanel() 计算的初始布局，不在此处动态改动位置和尺寸，避免布局错乱
             }
         } else {
             // No selection: clear fields
@@ -357,6 +366,10 @@ public class CommandEditorScreen extends Screen {
             singleCommandField.setText("");
             subCommandInput.setText("");
             delayInput.setText("");
+            if (subCommandListWidget != null) {
+                subCommandListWidget.setEntries(java.util.List.of());
+                subCommandListWidget.setSelected(null);
+            }
         }
 
         // 按钮可用状态：选中子命令后才能更新/删除
@@ -416,7 +429,8 @@ public class CommandEditorScreen extends Screen {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        this.renderBackground(context, mouseX, mouseY, delta);
+        // Semi-transparent black background
+        context.fill(0, 0, this.width, this.height, 0xA0000000);
         super.render(context, mouseX, mouseY, delta);
         String title = getTitle().getString();
         modernRenderer.drawCenteredText(context, title, this.width / 2f, 15, 0xFFFFFFFF, false, 1.2f);

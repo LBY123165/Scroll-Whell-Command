@@ -59,6 +59,11 @@ public class ColorPickerScreen extends Screen {
     }
 
     @Override
+    public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
+        // No-op: remove vanilla dirt background for a clean UI
+    }
+
+    @Override
     protected void init() {
         super.init();
         this.clearChildren();
@@ -496,8 +501,9 @@ public class ColorPickerScreen extends Screen {
         public void onClick(double mouseX, double mouseY) {
             if (onClick != null) onClick.run();
         }
+        // In 1.20.2, ClickableWidget expects renderButton
         @Override
-        protected void renderWidget(DrawContext ctx, int mouseX, int mouseY, float delta) {
+        protected void renderButton(DrawContext ctx, int mouseX, int mouseY, float delta) {
             ctx.fill(getX(), getY(), getX() + getWidth(), getY() + getHeight(), color);
             int border = isHovered() ? 0xFFFFFFFF : 0xFF000000;
             // border
@@ -505,6 +511,11 @@ public class ColorPickerScreen extends Screen {
             ctx.fill(getX(), getY() + getHeight() - 1, getX() + getWidth(), getY() + getHeight(), border);
             ctx.fill(getX(), getY(), getX() + 1, getY() + getHeight(), border);
             ctx.fill(getX() + getWidth() - 1, getY(), getX() + getWidth(), getY() + getHeight(), border);
+        }
+
+        // Forward-compat: expose renderWidget delegating to renderButton (no @Override)
+        public void renderWidget(DrawContext ctx, int mouseX, int mouseY, float delta) {
+            this.renderButton(ctx, mouseX, mouseY, delta);
         }
         @Override
         protected void appendClickableNarrations(NarrationMessageBuilder builder) {

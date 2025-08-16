@@ -52,16 +52,9 @@ public class RadialMenuSegmentWidget extends ClickableWidget {
         }
     }
 
-    public void setForcedHighlight(boolean v) {
-        this.forcedHighlight = v;
-    }
-
-    public void setHovered(boolean hovered) {
-        this.hovered = hovered;
-    }
-
+    // In 1.20.2, ClickableWidget uses renderButton. Override it here.
     @Override
-    public void renderWidget(DrawContext context, int mouseX, int mouseY, float delta) {
+    protected void renderButton(DrawContext context, int mouseX, int mouseY, float delta) {
         if (!this.visible) return;
 
         float centerX = this.getX() + this.width / 2f;
@@ -90,10 +83,8 @@ public class RadialMenuSegmentWidget extends ClickableWidget {
 
             // Rotate text to align with segment, but keep it readable (not upside down)
             float rotationAngle = midAngle;
-            // Normalize angle to be in range [0, 2PI]
             while(rotationAngle < 0) rotationAngle += 2 * Math.PI;
             while(rotationAngle > 2 * Math.PI) rotationAngle -= 2 * Math.PI;
-
             if (rotationAngle > Math.PI / 2 && rotationAngle < 3 * Math.PI / 2) {
                 rotationAngle += (float) Math.PI;
             }
@@ -104,6 +95,20 @@ public class RadialMenuSegmentWidget extends ClickableWidget {
 
             context.getMatrices().pop();
         }
+    }
+
+    public void setForcedHighlight(boolean v) {
+        this.forcedHighlight = v;
+    }
+
+    public void setHovered(boolean hovered) {
+        this.hovered = hovered;
+    }
+
+    // Forward-compat helper for newer mappings that call renderWidget
+    // Do not add @Override so it compiles across minor versions.
+    public void renderWidget(DrawContext context, int mouseX, int mouseY, float delta) {
+        this.renderButton(context, mouseX, mouseY, delta);
     }
 
     @Override

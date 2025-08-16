@@ -48,6 +48,11 @@ public class RadialMenuScreen extends Screen {
     }
 
     @Override
+    public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
+        // No-op: keep world visible behind radial menu and avoid vanilla dirt bg
+    }
+
+    @Override
     protected void init() {
         super.init();
         this.clearChildren(); // Clear old widgets

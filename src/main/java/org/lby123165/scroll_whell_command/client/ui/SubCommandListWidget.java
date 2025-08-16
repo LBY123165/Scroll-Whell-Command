@@ -15,17 +15,59 @@ public class SubCommandListWidget extends ElementListWidget<SubCommandListWidget
 
     private final ModernTextRenderer modernRenderer;
     private final Consumer<SubCommandEntry> onSelectionChanged;
+    public boolean visible = true; // compatibility flag
+    private int compatX = 0;
+    private int topEdge;
+    private int bottomEdge;
 
     public SubCommandListWidget(MinecraftClient client, int width, int height, int y, int itemHeight, Consumer<SubCommandEntry> onSelectionChanged) {
-        super(client, width, height, y, itemHeight);
+        super(client, width, height, y, y + height, itemHeight);
         this.centerListVertically = false;
         this.modernRenderer = new ModernTextRenderer();
         this.onSelectionChanged = onSelectionChanged;
+        this.topEdge = y;
+        this.bottomEdge = y + height;
+        // Avoid drawing the screen's dirt background behind the list; we manage panel backgrounds ourselves
+        this.setRenderBackground(false);
     }
 
     public void setEntries(List<ConfigData.SubCommand> subCommands) {
         this.clearEntries();
         subCommands.forEach(sc -> this.addEntry(new SubCommandEntry(this, sc)));
+    }
+
+    // --- Compatibility helpers for 1.20.1/1.20.2 screens ---
+    public void setX(int x) {
+        this.compatX = x;
+        // Ensure ElementListWidget uses our panel bounds for rendering & scissor
+        this.left = x;
+        this.right = x + this.width;
+    }
+    public int getX() { return this.compatX; }
+    public void setY(int y) {
+        int currentHeight = this.bottomEdge - this.topEdge;
+        this.topEdge = y;
+        this.bottomEdge = y + currentHeight;
+        this.top = y;
+        this.bottom = y + currentHeight;
+    }
+    public int getY() { return this.topEdge; }
+    public void setHeight(int newHeight) {
+        this.bottomEdge = this.topEdge + newHeight;
+        this.bottom = this.top + newHeight;
+    }
+
+    // Allow parent to adjust width during layout recalculations
+    public void setWidthCompat(int newWidth) {
+        this.width = newWidth;
+        this.right = this.compatX + newWidth;
+    }
+
+    // Respect our visibility flag by gating rendering
+    @Override
+    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        if (!this.visible) return;
+        super.render(context, mouseX, mouseY, delta);
     }
 
     @Override
@@ -40,6 +82,16 @@ public class SubCommandListWidget extends ElementListWidget<SubCommandListWidget
     public int getRowWidth() {
         return this.width - 20;
     }
+
+    @Override
+    public int getRowLeft() { return this.compatX; }
+
+    @Override
+    public boolean isMouseOver(double mouseX, double mouseY) {
+        return this.visible && mouseX >= this.compatX && mouseX < this.compatX + this.width && mouseY >= this.topEdge && mouseY < this.bottomEdge;
+    }
+
+    public int getScrollbarPositionX() { return this.compatX + this.width - 6; }
 
     // Helper for parent to select by index after rebuild/reflow
     public void selectIndex(int index) {

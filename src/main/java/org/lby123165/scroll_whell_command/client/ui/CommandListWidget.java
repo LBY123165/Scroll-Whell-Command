@@ -13,16 +13,42 @@ public class CommandListWidget extends ElementListWidget<CommandListWidget.Comma
 
     private final CommandEditorScreen parentScreen;
     private final ModernTextRenderer modernRenderer;
+    public boolean visible = true; // compatibility for 1.20.1/1.20.2 screens
+    private int compatX = 0;
+    private int topEdge;
+    private int bottomEdge;
 
     public CommandListWidget(CommandEditorScreen parent, MinecraftClient client, int width, int height, int y, int itemHeight) {
-        super(client, width, height, y, itemHeight);
+        super(client, width, height, y, y + height, itemHeight);
         this.parentScreen = parent;
         this.modernRenderer = new ModernTextRenderer();
+        this.topEdge = y;
+        this.bottomEdge = y + height;
+        // Avoid drawing the vanilla dirt background behind the list; the screen renders its own background
+        this.setRenderBackground(false);
     }
 
     public void setEntries(List<ConfigData.CommandItem> items) {
         this.clearEntries();
         items.forEach(item -> this.addEntry(new CommandEntry(item)));
+    }
+
+    // --- Compatibility helpers for 1.20.1/1.20.2 screens ---
+    public void setX(int x) { this.compatX = x; }
+    public int getX() { return this.compatX; }
+    public void setY(int y) {
+        int currentHeight = this.bottomEdge - this.topEdge;
+        this.topEdge = y;
+        this.bottomEdge = y + currentHeight;
+    }
+    public int getY() { return this.topEdge; }
+    public void setHeight(int newHeight) { this.bottomEdge = this.topEdge + newHeight; }
+
+    // Respect our visibility flag by gating rendering
+    @Override
+    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        if (!this.visible) return;
+        super.render(context, mouseX, mouseY, delta);
     }
 
     @Override
@@ -34,6 +60,20 @@ public class CommandListWidget extends ElementListWidget<CommandListWidget.Comma
     @Override
     public int getRowWidth() {
         return this.width - 20;
+    }
+
+    @Override
+    public int getRowLeft() {
+        return this.compatX;
+    }
+
+    @Override
+    public boolean isMouseOver(double mouseX, double mouseY) {
+        return this.visible && mouseX >= this.compatX && mouseX < this.compatX + this.width && mouseY >= this.topEdge && mouseY < this.bottomEdge;
+    }
+
+    public int getScrollbarPositionX() {
+        return this.compatX + this.width - 6;
     }
 
     public class CommandEntry extends ElementListWidget.Entry<CommandEntry> {

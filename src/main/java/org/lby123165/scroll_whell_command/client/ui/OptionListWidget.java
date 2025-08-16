@@ -21,13 +21,18 @@ import java.util.function.Supplier;
 public class OptionListWidget extends ElementListWidget<OptionListWidget.OptionEntry> {
 
     private final ModernTextRenderer renderer = new ModernTextRenderer();
-    private final int topEdge;
-    private final int bottomEdge;
+    private int topEdge;
+    private int bottomEdge;
+    private int compatX = 0;
+    public boolean visible = true; // compatibility flag for older screens
 
     public OptionListWidget(MinecraftClient client, int width, int height, int y, int itemHeight) {
-        super(client, width, height, y, itemHeight);
+        super(client, width, height, y, y + height, itemHeight);
         this.topEdge = y;
         this.bottomEdge = y + height;
+        this.compatX = 0;
+        // Do not draw vanilla dirt background
+        this.setRenderBackground(false);
     }
 
     public void setOptions(List<OptionSpec> specs) {
@@ -35,6 +40,28 @@ public class OptionListWidget extends ElementListWidget<OptionListWidget.OptionE
         for (OptionSpec spec : specs) {
             this.addEntry(new OptionEntry(spec));
         }
+    }
+
+    // --- Compatibility helpers for 1.20.1/1.20.2 screens ---
+    public void setX(int x) { this.compatX = x; }
+
+    public int getX() { return this.compatX; }
+
+    public void setY(int y) {
+        int currentHeight = this.bottomEdge - this.topEdge;
+        this.topEdge = y;
+        this.bottomEdge = y + currentHeight;
+    }
+
+    public int getY() { return this.topEdge; }
+
+    public void setHeight(int newHeight) { this.bottomEdge = this.topEdge + newHeight; }
+
+    // Respect our visibility flag by gating rendering
+    @Override
+    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        if (!this.visible) return;
+        super.render(context, mouseX, mouseY, delta);
     }
 
     @Override
@@ -149,18 +176,18 @@ public class OptionListWidget extends ElementListWidget<OptionListWidget.OptionE
     @Override
     public int getRowLeft() {
         // Respect the explicit X set from the parent screen
-        return this.getX();
+        return this.compatX;
     }
 
     @Override
     public boolean isMouseOver(double mouseX, double mouseY) {
-        return mouseX >= this.getX() && mouseX < this.getX() + this.width && mouseY >= this.topEdge && mouseY < this.bottomEdge;
+        return this.visible && mouseX >= this.compatX && mouseX < this.compatX + this.width && mouseY >= this.topEdge && mouseY < this.bottomEdge;
     }
 
     // Not all versions expose this as an overridable method; keep it public without @Override
     public int getScrollbarPositionX() {
         // Align scrollbar to the right edge of this widget's bounds
-        return this.getX() + this.width - 6;
+        return this.compatX + this.width - 6;
     }
 
     public static class OptionSpec {

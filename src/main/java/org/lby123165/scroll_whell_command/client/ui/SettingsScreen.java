@@ -29,6 +29,25 @@ public class SettingsScreen extends Screen {
     }
 
     @Override
+    public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
+        // No-op: remove vanilla dirt background
+    }
+
+    @Override
+    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
+        // Semi-transparent black background
+        context.fill(0, 0, this.width, this.height, 0xA0000000);
+        super.render(context, mouseX, mouseY, delta);
+        modernRenderer.drawCenteredText(context, this.getTitle().getString(), this.width / 2f, 15, 0xFFFFFFFF, false, 1.2f);
+    }
+
+    @Override
+    public boolean shouldPause() {
+        // Keep world rendering; avoids vanilla paused dirt background bars
+        return false;
+    }
+
+    @Override
     protected void init() {
         super.init();
         this.clearChildren();
@@ -250,14 +269,6 @@ public class SettingsScreen extends Screen {
     private void onDone() {
         ConfigManager.save();
         this.close();
-    }
-
-    @Override
-    public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        this.renderBackground(context, mouseX, mouseY, delta);
-        super.render(context, mouseX, mouseY, delta);
-        String title = getTitle().getString();
-        modernRenderer.drawCenteredText(context, title, this.width / 2f, 15, 0xFFFFFFFF, false, 1.2f);
     }
 
     @Override
