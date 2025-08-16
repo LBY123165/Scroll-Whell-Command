@@ -66,7 +66,7 @@ public class CommandEditorScreen extends Screen {
     }
 
     @Override
-    public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
+    public void renderBackground(DrawContext context) {
         // No-op to fully remove the vanilla dirt background
     }
 

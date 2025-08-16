@@ -261,9 +261,9 @@ public class OptionListWidget extends ElementListWidget<OptionListWidget.OptionE
         }
 
         @Override
-        public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
-            if (this.control.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount)) return true;
-            return super.mouseScrolled(mouseX, mouseY, horizontalAmount, verticalAmount);
+        public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
+            if (this.control.mouseScrolled(mouseX, mouseY, amount)) return true;
+            return super.mouseScrolled(mouseX, mouseY, amount);
         }
 
         @Override

@@ -29,7 +29,7 @@ public class SettingsScreen extends Screen {
     }
 
     @Override
-    public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
+    public void renderBackground(DrawContext context) {
         // No-op: remove vanilla dirt background
     }
 

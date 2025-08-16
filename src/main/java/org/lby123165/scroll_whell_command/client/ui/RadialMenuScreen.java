@@ -48,7 +48,7 @@ public class RadialMenuScreen extends Screen {
     }
 
     @Override
-    public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
+    public void renderBackground(DrawContext context) {
         // No-op: keep world visible behind radial menu and avoid vanilla dirt bg
     }
 
@@ -229,9 +229,9 @@ public class RadialMenuScreen extends Screen {
     }
 
     @Override
-    public boolean mouseScrolled(double mouseX, double mouseY, double horizontalAmount, double verticalAmount) {
-        if (verticalAmount < 0) nextPage();
-        if (verticalAmount > 0) prevPage();
+    public boolean mouseScrolled(double mouseX, double mouseY, double amount) {
+        if (amount < 0) nextPage();
+        if (amount > 0) prevPage();
         return true;
     }
 

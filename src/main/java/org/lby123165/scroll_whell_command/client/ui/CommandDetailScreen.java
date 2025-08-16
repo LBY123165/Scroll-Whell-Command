@@ -54,7 +54,7 @@ public class CommandDetailScreen extends Screen {
     }
 
     @Override
-    public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
+    public void renderBackground(DrawContext context) {
         // No-op: remove vanilla dirt background
     }
 
@@ -221,7 +221,7 @@ public class CommandDetailScreen extends Screen {
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
-        this.renderBackground(context, mouseX, mouseY, delta);
+        this.renderBackground(context);
         super.render(context, mouseX, mouseY, delta);
         String title = this.getTitle().getString();
         modernRenderer.drawCenteredText(context, title, this.width / 2f, 15, 0xFFFFFFFF, false, 1.2f);

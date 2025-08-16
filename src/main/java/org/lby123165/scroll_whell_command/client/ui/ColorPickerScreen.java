@@ -59,7 +59,7 @@ public class ColorPickerScreen extends Screen {
     }
 
     @Override
-    public void renderBackground(DrawContext context, int mouseX, int mouseY, float delta) {
+    public void renderBackground(DrawContext context) {
         // No-op: remove vanilla dirt background for a clean UI
     }
 
@@ -173,7 +173,7 @@ public class ColorPickerScreen extends Screen {
 
     @Override
     public void render(DrawContext ctx, int mouseX, int mouseY, float delta) {
-        this.renderBackground(ctx, mouseX, mouseY, delta);
+        this.renderBackground(ctx);
         super.render(ctx, mouseX, mouseY, delta);
         modernRenderer.drawCenteredText(ctx, this.getTitle().getString(), this.width / 2f, 15, 0xFFFFFFFF, false, 1.2f);
 
