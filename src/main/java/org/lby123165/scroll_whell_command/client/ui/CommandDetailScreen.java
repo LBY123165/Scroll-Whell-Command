@@ -83,7 +83,7 @@ public class CommandDetailScreen extends Screen {
         // Label field
         this.addDrawableChild(new TranslatableTextWidget(startX, y + 5, labelWidth, buttonHeight, Text.translatable("label.scroll_whell_command.command_label"), this.textRenderer));
         this.labelField = new TextFieldWidget(this.textRenderer, startX + labelWidth + gap, y, fieldWidth, buttonHeight, Text.translatable("label.scroll_whell_command.command_label"));
-        this.labelField.setMaxLength(100);
+        this.labelField.setMaxLength(32767);
         this.labelField.setText(this.editing.label != null ? this.editing.label : "");
         this.labelField.setChangedListener(text -> updateSaveButtonState());
         this.addDrawableChild(this.labelField);
@@ -92,7 +92,7 @@ public class CommandDetailScreen extends Screen {
         // Single command field
         this.addDrawableChild(new TranslatableTextWidget(startX, y + 5, labelWidth, buttonHeight, Text.translatable("label.scroll_whell_command.command"), this.textRenderer));
         this.singleCommandField = new TextFieldWidget(this.textRenderer, startX + labelWidth + gap, y, fieldWidth, buttonHeight, Text.translatable("label.scroll_whell_command.command"));
-        this.singleCommandField.setMaxLength(500);
+        this.singleCommandField.setMaxLength(256);
         this.singleCommandField.setText(this.editing.command != null ? this.editing.command : "");
         this.singleCommandField.setChangedListener(text -> updateSaveButtonState());
         this.addDrawableChild(this.singleCommandField);
@@ -113,7 +113,7 @@ public class CommandDetailScreen extends Screen {
 
         // Sub-command fields
         this.subCmdField = new TextFieldWidget(this.textRenderer, startX, opAreaTop, subListWidth - 80 - gap, buttonHeight, Text.translatable("label.scroll_whell_command.sub_command"));
-        this.subCmdField.setMaxLength(500);
+        this.subCmdField.setMaxLength(256);
         this.subCmdField.setChangedListener(text -> updateSaveButtonState());
         this.addDrawableChild(subCmdField);
 

@@ -179,6 +179,7 @@ public class CommandEditorScreen extends Screen {
         // 名称
         this.addDrawableChild(new TranslatableTextWidget(x, currentY, width, 20, Text.translatable("label.scroll_whell_command.command_label"), this.textRenderer));
         labelField = new TextFieldWidget(this.textRenderer, x, currentY + 18, width, 20, Text.translatable("field.scroll_whell_command.label"));
+        labelField.setMaxLength(32767);
         labelField.setChangedListener(label -> {
             if (selectedItem != null) {
                 selectedItem.label = label;
@@ -193,6 +194,7 @@ public class CommandEditorScreen extends Screen {
         // 命令
         this.addDrawableChild(new TranslatableTextWidget(x, currentY, width, 20, Text.translatable("label.scroll_whell_command.command"), this.textRenderer));
         singleCommandField = new TextFieldWidget(this.textRenderer, x, currentY + 18, width, 20, Text.translatable("field.scroll_whell_command.command"));
+        singleCommandField.setMaxLength(256);
         singleCommandField.setChangedListener(cmd -> {
             if (selectedItem != null) {
                 selectedItem.command = cmd;
@@ -213,6 +215,7 @@ public class CommandEditorScreen extends Screen {
         // 输入：子命令
         int inputWidth = Math.max(60, width - 110);
         subCommandInput = new TextFieldWidget(this.textRenderer, x, opTop, inputWidth, 20, Text.translatable("field.scroll_whell_command.sub_command"));
+        subCommandInput.setMaxLength(256);
         this.addDrawableChild(subCommandInput);
         // 输入：延迟
         int delayX = x + Math.max(0, width - 104);

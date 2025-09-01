@@ -18,8 +18,10 @@ public final class CommandExecutor {
         if (s.startsWith("/")) {
             // strip leading '/' for sendChatCommand
             String noSlash = s.substring(1);
+            if (noSlash.length() > 256) noSlash = noSlash.substring(0, 256);
             nh.sendChatCommand(noSlash);
         } else {
+            if (s.length() > 256) s = s.substring(0, 256);
             nh.sendChatMessage(s);
         }
     }
