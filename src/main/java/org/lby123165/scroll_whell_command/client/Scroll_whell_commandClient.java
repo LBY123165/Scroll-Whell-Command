@@ -14,6 +14,8 @@ import org.lby123165.scroll_whell_command.client.ui.RadialMenuScreen;
 public class Scroll_whell_commandClient implements ClientModInitializer {
 
     private final RadialMenuOverlay radialMenuOverlay = new RadialMenuOverlay();
+    // Edge-detect the open key to avoid flicker and repeat when holding a keyboard key
+    private boolean openKeyDownPrev = false;
 
     @Override
     public void onInitializeClient() {
@@ -39,10 +41,17 @@ public class Scroll_whell_commandClient implements ClientModInitializer {
         // Advance scheduler each tick
         CommandScheduler.tick(client);
 
+        boolean openKeyDown = KeyBindings.OPEN_WHEEL.isPressed();
+
+        // If any screen (e.g., chat) is open, do not open the overlay; if already open, cancel and close
+        if (client.currentScreen != null && RadialMenuOverlay.isVisible()) {
+            RadialMenuOverlay.hideAndCancel();
+        }
+
         // Handle the radial menu logic if it's visible
         if (RadialMenuOverlay.isVisible()) {
-            // The menu is open. Check for the release of the key to execute.
-            if (!KeyBindings.OPEN_WHEEL.isPressed()) {
+            // Close on release edge only (prevents flicker)
+            if (!openKeyDown && openKeyDownPrev) {
                 RadialMenuOverlay.hideAndExecute();
             }
             // Note: Mouse clicks and scrolls are handled via MouseMixin.
@@ -60,12 +69,9 @@ public class Scroll_whell_commandClient implements ClientModInitializer {
             }
 
         } else {
-            // The menu is not open, check if we should open it
-            if (KeyBindings.OPEN_WHEEL.wasPressed()) {
-                // Don't open if another screen is already open (e.g., chat, inventory)
-                if (client.currentScreen == null) {
-                    RadialMenuOverlay.show();
-                }
+            // The menu is not open, open only on press edge and only when no screen is open
+            if (openKeyDown && !openKeyDownPrev && client.currentScreen == null) {
+                RadialMenuOverlay.show();
             }
         }
 
@@ -75,5 +81,8 @@ public class Scroll_whell_commandClient implements ClientModInitializer {
                 client.setScreen(new CommandEditorScreen(null));
             }
         }
+
+        // Update previous state at end of tick
+        openKeyDownPrev = openKeyDown;
     }
 }
