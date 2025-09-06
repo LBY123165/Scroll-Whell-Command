@@ -1,4 +1,4 @@
-# Scroll Whell Command (Fabric 1.20.6)
+# Scroll Whell Command (Fabric 1.20.1)
 
 一个仿APEX风格的轮盘快捷命令
 *（温馨提示：本README为AI生成）*
@@ -18,7 +18,7 @@
 
 ## 📦 Installation 安装
 
-1. 安装 Fabric Loader 与 Fabric API（对应 1.20.6）。
+1. 安装 Fabric Loader 与 Fabric API（对应 1.20.1）。
 2. 下载本模组的发布版 JAR（例如 `build/libs/Scroll-Whell-Command-0.2.jar` 或 GitHub Releases 最新版本）。
 3. 将 JAR 放入 `.minecraft/mods/` 目录。
 4. 启动游戏。
@@ -27,7 +27,7 @@
 
 ## 🏗 Build from Source 源码构建
 
-- 需要 JDK 21（1.20.5/1.20.6 要求 Java 21）。
+- 需要 JDK 21（1.20.1 要求 Java 21）。
 - 使用项目自带的 Gradle Wrapper：
   - Windows: `gradlew.bat build`
   - macOS/Linux: `./gradlew build`
@@ -69,8 +69,8 @@
 
 ## ✅ Compatibility 兼容性
   
-  - 当前目标版本：Minecraft 1.20.6（Fabric）
-  - 计划测试范围：1.20.1–1.20.6。若发现不兼容，将提供相应适配或独立构建。
+  - 当前目标版本：Minecraft 1.20.1（Fabric）
+  - 计划测试范围：1.20.1。若发现不兼容，将提供相应适配或独立构建。
 
 ## 📜 License 许可
   
