@@ -81,9 +81,14 @@ public class ConfigData {
 
             // Unified behavior: if starts with '/', run as command; otherwise send as chat message
             if (cmd.startsWith("/")) {
-                client.execute(() -> client.player.networkHandler.sendChatCommand(cmd.substring(1)));
+                String noSlash = cmd.substring(1);
+                if (noSlash.length() > 256) noSlash = noSlash.substring(0, 256);
+                String finalNoSlash = noSlash;
+                client.execute(() -> client.player.networkHandler.sendChatCommand(finalNoSlash));
             } else {
-                client.execute(() -> client.player.networkHandler.sendChatMessage(cmd));
+                if (cmd.length() > 256) cmd = cmd.substring(0, 256);
+                String finalMsg = cmd;
+                client.execute(() -> client.player.networkHandler.sendChatMessage(finalMsg));
             }
         }
     }
